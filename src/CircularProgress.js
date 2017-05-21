@@ -12,10 +12,10 @@ export default class CircularProgress extends React.Component {
       p.path.push(0, cx + r, cy);
       p.path.push(4, cx, cy, r, startDegree * Math.PI / 180, endDegree * Math.PI / 180, 1);
     } else {
-      // For Android we have to resort to drawing low-level Path primitives, as ART does not support 
+      // For Android we have to resort to drawing low-level Path primitives, as ART does not support
       // arbitrary circle segments. It also does not support strokeDash.
       // Furthermore, the ART implementation seems to be buggy/different than the iOS one.
-      // MoveTo is not needed on Android 
+      // MoveTo is not needed on Android
       p.path.push(4, cx, cy, r, startDegree * Math.PI / 180, (startDegree - endDegree) * Math.PI / 180, 0);
     }
     return p;
@@ -32,7 +32,7 @@ export default class CircularProgress extends React.Component {
   }
 
   render() {
-    const { size, width, tintColor, backgroundColor, style, rotation, linecap, children } = this.props;
+    const { size, width, tintColor, backgroundColor, backgroundOpacity, style, rotation, linecap, children } = this.props;
     const backgroundPath = this.circlePath(size / 2, size / 2, size / 2 - width / 2, 0, 360);
 
     const fill = this.extractFill(this.props.fill);
@@ -46,6 +46,7 @@ export default class CircularProgress extends React.Component {
           <Group rotation={rotation - 90} originX={size/2} originY={size/2}>
             <Shape d={backgroundPath}
                    stroke={backgroundColor}
+                   opacity={backgroundOpacity}
                    strokeWidth={width}/>
             <Shape d={circlePath}
                    stroke={tintColor}
@@ -68,6 +69,7 @@ CircularProgress.propTypes = {
   width: PropTypes.number.isRequired,
   tintColor: PropTypes.string,
   backgroundColor: PropTypes.string,
+  backgroundOpacity: PropTypes.number,
   rotation: PropTypes.number,
   linecap: PropTypes.string,
   children: PropTypes.func
@@ -77,5 +79,6 @@ CircularProgress.defaultProps = {
   tintColor: 'black',
   backgroundColor: '#e4e4e4',
   rotation: 90,
-  linecap: 'butt'
+  linecap: 'butt',
+  backgroundOpacity: 1
 }
